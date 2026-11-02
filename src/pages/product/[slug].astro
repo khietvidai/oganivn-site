@@ -14,6 +14,12 @@ if (!slug) {
 	return new Response(null, { status: 404, statusText: "Not Found" });
 }
 
+if (Astro.request.method === "POST") {
+	return Astro.redirect(`/cart/?added=${encodeURIComponent(slug)}`, 303);
+}
+
+const reviewSubmitted = Astro.url.searchParams.get("review_submitted") === "1";
+
 const { entry: product, cacheHint } = await getEmDashEntry("products", slug);
 if (!product) {
 	return new Response(null, { status: 404, statusText: "Not Found" });
@@ -58,6 +64,17 @@ const exactProductMainHtml = productsMainMap[slug];
 	content={{ collection: "products", id: product.data.id, slug }}
 >
 	{
+		reviewSubmitted && (
+			<div class="container" role="status" aria-live="polite" style="margin-top: 1rem;">
+				<div class="woocommerce-message message-wrapper">
+					<div class="message-container container success-color medium-text-center">
+						Thank you! Your review has been submitted and is awaiting moderation.
+					</div>
+				</div>
+			</div>
+		)
+	}
+	{
 		exactProductMainHtml ? (
 			<Fragment set:html={exactProductMainHtml} />
 		) : (
@@ -69,8 +86,12 @@ const exactProductMainHtml = productsMainMap[slug];
 								<div class="product-gallery large-6 col">
 									{featSrc && (
 										<img
+											fetchpriority="high"
+											decoding="async"
+											width={product.data.featured_image?.width || 600}
+											height={product.data.featured_image?.height || 600}
 											src={featSrc}
-											alt={product.data.title}
+											alt={product.data.featured_image?.alt || product.data.title}
 											class="wp-post-image"
 										/>
 									)}

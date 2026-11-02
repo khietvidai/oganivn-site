@@ -34,8 +34,9 @@ if (Astro.cache?.enabled) {
 	<div class="shop-page-title category-page-title page-title">
 		<div class="page-title-inner flex-row medium-flex-wrap container">
 			<div class="flex-col flex-grow medium-text-center">
+				<h1 class="screen-reader-text">{term.label}</h1>
 				<div class="is-large">
-					<nav class="woocommerce-breadcrumb breadcrumbs uppercase">
+					<nav class="woocommerce-breadcrumb breadcrumbs uppercase" aria-label="Breadcrumb">
 						<a href="/">Home</a> <span class="divider">&#47;</span>{" "}
 						<a href="/shop/">Shop</a> <span class="divider">&#47;</span>{" "}
 						{term.label}

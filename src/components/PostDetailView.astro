@@ -67,6 +67,29 @@ const publishedAt = wpPubIso
 const modifiedAt = wpModIso ? new Date(wpModIso) : post.data.updatedAt;
 const featSrc = post.data.featured_image?.src || "";
 const featAlt = post.data.featured_image?.alt || post.data.title || "";
+
+const normalizedContent = (() => {
+	const rawBlocks = Array.isArray(post.data.content) ? post.data.content : [];
+	let prevHeadingLevel = 1;
+	return rawBlocks.map((block: Record<string, any>) => {
+		if (!block || typeof block !== "object") return block;
+		if (block._type === "block" && typeof block.style === "string" && /^h[1-6]$/.test(block.style)) {
+			let lvl = Number(block.style.slice(1));
+			if (lvl === 1) lvl = 2;
+			if (lvl - prevHeadingLevel > 1) lvl = prevHeadingLevel + 1;
+			prevHeadingLevel = lvl;
+			return { ...block, style: `h${lvl}` };
+		}
+		if (block._type === "image" && !block.alt && !block.asset?.alt) {
+			return {
+				...block,
+				alt: featAlt,
+				asset: block.asset ? { ...block.asset, alt: featAlt } : block.asset,
+			};
+		}
+		return block;
+	});
+})();
 ---
 
 <Base
@@ -91,24 +114,24 @@ const featAlt = post.data.featured_image?.alt || post.data.title || "";
 				>
 					<div class="article-inner">
 						<div class="entry-content single-page">
+							<h1 class="entry-title">{post.data.title}</h1>
 							{
-								featSrc ? (
-									<h1>
+								featSrc && (
+									<figure class="wp-block-image size-full">
 										<img
 											fetchpriority="high"
 											decoding="async"
+											width={post.data.featured_image?.width || 1024}
+											height={post.data.featured_image?.height || 576}
 											class="aligncenter size-full"
 											src={featSrc}
 											alt={featAlt}
-											title={post.data.title}
 										/>
-									</h1>
-								) : (
-									<h1 class="entry-title">{post.data.title}</h1>
+									</figure>
 								)
 							}
 
-							<PortableText value={post.data.content} />
+							<PortableText value={normalizedContent} />
 
 							<div class="blog-share text-center">
 								<div class="is-divider medium"></div>
@@ -120,7 +143,7 @@ const featAlt = post.data.featured_image?.alt || post.data.title || "";
 										title="Share on WhatsApp"
 										aria-label="Share on WhatsApp"
 									>
-										<i class="icon-whatsapp"></i>
+										<i class="icon-whatsapp" aria-hidden="true"></i>
 									</a>
 									<a
 										href={`https://www.facebook.com/sharer.php?u=${encodedUrl}`}
@@ -131,7 +154,7 @@ const featAlt = post.data.featured_image?.alt || post.data.title || "";
 										title="Share on Facebook"
 										aria-label="Share on Facebook"
 									>
-										<i class="icon-facebook"></i>
+										<i class="icon-facebook" aria-hidden="true"></i>
 									</a>
 									<a
 										href={`https://twitter.com/share?url=${encodedUrl}`}
@@ -141,16 +164,16 @@ const featAlt = post.data.featured_image?.alt || post.data.title || "";
 										title="Share on Twitter"
 										aria-label="Share on Twitter"
 									>
-										<i class="icon-twitter"></i>
+										<i class="icon-twitter" aria-hidden="true"></i>
 									</a>
 									<a
-										href={`mailto:enteryour@addresshere.com?subject=${encodedTitle}&body=Check%20this%20out:%20${encodedUrl}`}
+										href={`mailto:?subject=${encodedTitle}&body=Check%20this%20out:%20${encodedUrl}`}
 										rel="nofollow"
 										class="icon button circle is-outline tooltip email"
 										title="Email to a Friend"
 										aria-label="Email to a Friend"
 									>
-										<i class="icon-envelop"></i>
+										<i class="icon-envelop" aria-hidden="true"></i>
 									</a>
 									<a
 										href={`https://pinterest.com/pin/create/button/?url=${encodedUrl}&description=${encodedTitle}`}
@@ -160,7 +183,7 @@ const featAlt = post.data.featured_image?.alt || post.data.title || "";
 										title="Pin on Pinterest"
 										aria-label="Pin on Pinterest"
 									>
-										<i class="icon-pinterest"></i>
+										<i class="icon-pinterest" aria-hidden="true"></i>
 									</a>
 									<a
 										href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedTitle}`}
@@ -170,7 +193,7 @@ const featAlt = post.data.featured_image?.alt || post.data.title || "";
 										title="Share on LinkedIn"
 										aria-label="Share on LinkedIn"
 									>
-										<i class="icon-linkedin"></i>
+										<i class="icon-linkedin" aria-hidden="true"></i>
 									</a>
 								</div>
 							</div>
@@ -181,7 +204,7 @@ const featAlt = post.data.featured_image?.alt || post.data.title || "";
 				<div id="comments" class="comments-area">
 					<Comments collection="posts" contentId={post.data.id} />
 					<div id="respond" class="comment-respond">
-						<h3 id="reply-title" class="comment-reply-title">Leave a Reply</h3>
+						<h2 id="reply-title" class="comment-reply-title">Leave a Reply</h2>
 						<CommentForm collection="posts" contentId={post.data.id} />
 					</div>
 				</div>

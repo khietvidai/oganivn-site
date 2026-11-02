@@ -103,6 +103,11 @@ const pageSeo = page
 
 const pagesMainMap = flatsomeTemplates.pagesMain as Record<string, string>;
 const exactPageMainHtml = pagesMainMap[slug];
+
+let contactSubmitted = Astro.url.searchParams.get("sent") === "1";
+if (slug === "contact" && Astro.request.method === "POST") {
+	contactSubmitted = true;
+}
 ---
 
 {
@@ -135,8 +140,8 @@ const exactPageMainHtml = pagesMainMap[slug];
 					<div class="large-10 col">
 						{catPosts.length > 0 && (
 							<div
-								class="row large-columns-3 medium-columns- small-columns-1 row-masonry"
-								data-packery-options='{"itemSelector": ".col", "gutter": 0, "presentageWidth" : true}'
+								class="row large-columns-3 medium-columns-2 small-columns-1 row-masonry"
+								data-packery-options='{"itemSelector": ".col", "gutter": 0, "percentPosition": true}'
 							>
 								{catPosts.map((p) => (
 									<PostCard post={p} />
@@ -168,11 +173,20 @@ const exactPageMainHtml = pagesMainMap[slug];
 			bodyClass={`page-template-default page wp-singular theme-flatsome woocommerce-no-js lightbox nav-dropdown-has-arrow nav-dropdown-has-shadow nav-dropdown-has-border`}
 			content={{ collection: "pages", id: page.data.id, slug }}
 		>
+			{contactSubmitted && (
+				<div class="container" role="status" aria-live="polite" style="margin-top: 1.5rem;">
+					<div class="woocommerce-message message-wrapper">
+						<div class="message-container container success-color medium-text-center">
+							Thank you for your message! Our team will get back to you shortly.
+						</div>
+					</div>
+				</div>
+			)}
 			{exactPageMainHtml ? (
 				<Fragment set:html={exactPageMainHtml} />
 			) : (
 				<div class="row page-wrapper">
-					<div id="content" class="large-12 col" role="main">
+					<div id="content" class="large-12 col">
 						<header class="entry-header text-center">
 							<h1 class="entry-title">{page.data.title}</h1>
 							<div class="is-divider medium" />
@@ -194,8 +208,9 @@ const exactPageMainHtml = pagesMainMap[slug];
 			<div class="shop-page-title category-page-title page-title">
 				<div class="page-title-inner flex-row medium-flex-wrap container">
 					<div class="flex-col flex-grow medium-text-center">
+						<h1 class="screen-reader-text">{productCat?.label}</h1>
 						<div class="is-large">
-							<nav class="woocommerce-breadcrumb breadcrumbs uppercase">
+							<nav class="woocommerce-breadcrumb breadcrumbs uppercase" aria-label="Breadcrumb">
 								<a href="/">Home</a> <span class="divider">&#47;</span>{" "}
 								<a href="/shop/">Shop</a> <span class="divider">&#47;</span>{" "}
 								{productCat?.label}

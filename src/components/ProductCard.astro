@@ -22,7 +22,7 @@ const backImg = meta.backImg || "";
 const badge = meta.badge || "";
 const priceHtml =
 	meta.priceHtml ||
-	'<span class="price"><span class="amount red">Liên hệ</span><span class="stars_info"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></span></span>';
+	'<span class="price"><span class="amount red">Liên hệ</span><span class="stars_info" role="img" aria-label="Rated 5 out of 5 stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></span></span>';
 ---
 
 <div class="product-small col has-hover product type-product status-publish instock has-post-thumbnail shipping-taxable product-type-simple">
@@ -51,6 +51,7 @@ const priceHtml =
 									class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail"
 									alt={product.data.featured_image?.alt || title}
 									decoding="async"
+									fetchpriority={priority ? "high" : undefined}
 									loading={priority ? "eager" : "lazy"}
 								/>
 							)
@@ -64,6 +65,7 @@ const priceHtml =
 									class="show-on-hover absolute fill hide-for-small back-image"
 									alt=""
 									decoding="async"
+									fetchpriority="low"
 									loading="lazy"
 								/>
 							)

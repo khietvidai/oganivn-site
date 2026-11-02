@@ -3,37 +3,47 @@ import { getEmDashCollection } from "emdash";
 import Base from "../../../layouts/Base.astro";
 import PostCard from "../../../components/PostCard.astro";
 
-const pageParam = Number(Astro.params.page || "1");
-if (!Number.isInteger(pageParam) || pageParam < 1) {
+const POSTS_PER_PAGE = 10;
+const pageParam = Number.parseInt(Astro.params.page ?? "", 10);
+
+if (!Number.isFinite(pageParam) || pageParam < 1) {
 	return new Response(null, { status: 404, statusText: "Not Found" });
 }
+
 if (pageParam === 1) {
 	return Astro.redirect("/blog/", 301);
 }
 
-const POSTS_PER_PAGE = 10;
-const offset = (pageParam - 1) * POSTS_PER_PAGE;
-
-const { entries: allPosts, cacheHint } = await getEmDashCollection("posts", {
+const { entries: posts, cacheHint } = await getEmDashCollection("posts", {
 	orderBy: { published_at: "desc" },
 	limit: 500,
 });
 if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 
-const visiblePosts = allPosts.slice(offset, offset + POSTS_PER_PAGE);
-if (visiblePosts.length === 0) {
+const totalPages = Math.max(1, Math.ceil(posts.length / POSTS_PER_PAGE));
+if (pageParam > totalPages) {
 	return new Response(null, { status: 404, statusText: "Not Found" });
 }
 
-const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
-const hasMore = pageParam < totalPages;
-const prevHref = pageParam === 2 ? "/blog/" : `/blog/page/${pageParam - 1}/`;
-const nextHref = `/blog/page/${pageParam + 1}/`;
+const start = (pageParam - 1) * POSTS_PER_PAGE;
+const visiblePosts = posts.slice(start, start + POSTS_PER_PAGE);
+
+function pageHref(p: number): string {
+	return p === 1 ? "/blog/" : `/blog/page/${p}/`;
+}
+
+const windowPages = Array.from(
+	new Set(
+		[1, pageParam - 1, pageParam, pageParam + 1, totalPages].filter(
+			(p) => p >= 1 && p <= totalPages,
+		),
+	),
+).sort((a, b) => a - b);
 ---
 
 <Base
 	title={`Blog - Page ${pageParam} - Ogani`}
-	description={`Page ${pageParam} of articles and guides from Ogani Vietnam.`}
+	description={`Articles, guides, and nutrition facts on tropical soft-dried fruits from Ogani Vietnam (Page ${pageParam} of ${totalPages}).`}
 	canonical={`${Astro.url.origin}/blog/page/${pageParam}/`}
 	bodyClass="archive paged category category-blog theme-flatsome woocommerce-no-js lightbox nav-dropdown-has-arrow nav-dropdown-has-shadow nav-dropdown-has-border"
 >
@@ -42,7 +52,7 @@ const nextHref = `/blog/page/${pageParam + 1}/`;
 			<div class="row">
 				<div class="large-12 text-center col">
 					<h1 class="page-title is-large uppercase">
-						Category Archives: <span>Blog</span>
+						Category Archives: <span>Blog (Page {pageParam})</span>
 					</h1>
 				</div>
 			</div>
@@ -51,33 +61,62 @@ const nextHref = `/blog/page/${pageParam + 1}/`;
 		<div class="row align-center">
 			<div class="large-10 col">
 				<div
-					class="row large-columns-3 medium-columns- small-columns-1 row-masonry"
-					data-packery-options='{"itemSelector": ".col", "gutter": 0, "presentageWidth" : true}'
+					class="row large-columns-3 medium-columns-2 small-columns-1 row-masonry"
+					data-packery-options='{"itemSelector": ".col", "gutter": 0, "percentPosition": true}'
 				>
 					{visiblePosts.map((post) => <PostCard post={post} />)}
 				</div>
 
-				<ul class="page-numbers nav-pagination links text-center">
-					<li>
-						<a class="prev page-number" href={prevHref}>
-							<i class="icon-angle-left"></i>
-						</a>
-					</li>
-					<li>
-						<span aria-current="page" class="page-number current">
-							{pageParam}
-						</span>
-					</li>
-					{
-						hasMore && (
+				<nav aria-label="Pagination">
+					<ul class="page-numbers nav-pagination links text-center">
+						{pageParam > 1 && (
 							<li>
-								<a class="next page-number" href={nextHref}>
-									<i class="icon-angle-right" />
+								<a
+									class="prev page-number"
+									href={pageHref(pageParam - 1)}
+									aria-label="Previous page"
+								>
+									<i class="icon-angle-left" aria-hidden="true" />
 								</a>
 							</li>
-						)
-					}
-				</ul>
+						)}
+						{windowPages.map((p, idx) => {
+							const prev = windowPages[idx - 1];
+							const showDots = prev !== undefined && p - prev > 1;
+							return (
+								<>
+									{showDots && (
+										<li>
+											<span class="page-number dots">&hellip;</span>
+										</li>
+									)}
+									<li>
+										{p === pageParam ? (
+											<span aria-current="page" class="page-number current">
+												{p}
+											</span>
+										) : (
+											<a class="page-number" href={pageHref(p)}>
+												{p}
+											</a>
+										)}
+									</li>
+								</>
+							);
+						})}
+						{pageParam < totalPages && (
+							<li>
+								<a
+									class="next page-number"
+									href={pageHref(pageParam + 1)}
+									aria-label="Next page"
+								>
+									<i class="icon-angle-right" aria-hidden="true" />
+								</a>
+							</li>
+						)}
+					</ul>
+				</nav>
 			</div>
 		</div>
 	</div>

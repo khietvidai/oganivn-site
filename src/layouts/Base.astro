@@ -95,6 +95,13 @@ const lang = getSiteLocale() ?? "en-US";
 			href="/rss.xml"
 		/>
 		<link
+			rel="preload"
+			href="/wp-content/themes/flatsome/assets/css/icons/fl-icons.woff2?v=3.16.1"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
+		<link
 			rel="stylesheet"
 			id="contact-form-7-css"
 			href="/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=6.1.7"
@@ -120,22 +127,31 @@ const lang = getSiteLocale() ?? "en-US";
 		/>
 		<link
 			rel="stylesheet"
-			id="FontAwesome"
-			href="/wp-content/themes/ogani/css/FontAwesome.Pro.6.4.0/css/all.min.css"
-			type="text/css"
-			media="all"
-		/>
-		<link
-			rel="stylesheet"
 			id="NkCss"
 			href="/wp-content/themes/ogani/css.css"
 			type="text/css"
 			media="all"
 		/>
 		<Fragment set:html={flatsomeTemplates.headStylesHtml} />
-		<script is:inline src="/wp-includes/js/jquery/jquery.min.js?ver=3.7.1"></script>
-		<script is:inline src="/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"></script>
+		<script is:inline defer src="/wp-includes/js/jquery/jquery.min.js?ver=3.7.1"></script>
+		<script is:inline defer src="/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"></script>
 		<style is:global>
+			/* Lightweight star icon replacement (eliminates 498 KB FontAwesome bundle) */
+			.fa-solid.fa-star {
+				display: inline-block;
+				font-style: normal;
+				line-height: 1;
+			}
+			.fa-solid.fa-star::before {
+				content: "★";
+				content: "★" / "";
+			}
+			/* Defer rendering of heavy off-screen sections below the fold */
+			#section_620553202,
+			#footer {
+				content-visibility: auto;
+				contain-intrinsic-size: auto 600px;
+			}
 			/* Ensure PortableText images and tables inside single-page match Flatsome WordPress styling */
 			.entry-content.single-page h1 img,
 			.entry-content.single-page img {
@@ -180,8 +196,8 @@ const lang = getSiteLocale() ?? "en-US";
 		<Fragment set:html={flatsomeTemplates.mobileMenuHtml} />
 		<Fragment set:html={flatsomeTemplates.whatsappHtml} />
 
-		<script is:inline src="/wp-includes/js/dist/vendor/wp-polyfill.min.js?ver=3.15.0"></script>
-		<script is:inline src="/wp-includes/js/hoverIntent.min.js?ver=1.10.2"></script>
+		<script is:inline defer fetchpriority="low" src="/wp-includes/js/dist/vendor/wp-polyfill.min.js?ver=3.15.0"></script>
+		<script is:inline defer src="/wp-includes/js/hoverIntent.min.js?ver=1.10.2"></script>
 		<script is:inline>
 			window.flatsomeVars = {
 				theme: { version: "3.16.1" },
@@ -191,7 +207,7 @@ const lang = getSiteLocale() ?? "en-US";
 				assets_url: "/wp-content/themes/flatsome/assets/js/",
 				lightbox: {
 					close_markup:
-						'<button title="%title%" type="button" class="mfp-close"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>',
+						'<button title="%title%" type="button" class="mfp-close"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>',
 					close_btn_inside: false,
 				},
 				user: { can_edit_pages: false },
@@ -210,8 +226,8 @@ const lang = getSiteLocale() ?? "en-US";
 				is_mini_cart_reveal: "1",
 			};
 		</script>
-		<script is:inline src="/wp-content/themes/flatsome/assets/js/flatsome.js?ver=3.16.1"></script>
-		<script is:inline src="/wp-content/themes/flatsome/assets/js/woocommerce.js?ver=3.16.1"></script>
+		<script is:inline defer src="/wp-content/themes/flatsome/assets/js/flatsome.js?ver=3.16.1"></script>
+		<script is:inline defer fetchpriority="low" src="/wp-content/themes/flatsome/assets/js/woocommerce.js?ver=3.16.1"></script>
 		<EmDashBodyEnd page={pageCtx} />
 	</body>
 </html>

@@ -9,7 +9,8 @@ interface Props {
 	priority?: boolean;
 }
 
-const { post } = Astro.props;
+const { post, headingLevel = 2, priority = false } = Astro.props;
+const Heading = headingLevel === 3 ? "h3" : "h2";
 const href = `/${post.id}/`;
 const title = post.data.title || "Untitled";
 const excerpt = post.data.excerpt
@@ -36,7 +37,8 @@ const imageAlt = post.data.featured_image?.alt || title;
 									class="attachment-medium size-medium wp-post-image"
 									alt={imageAlt}
 									decoding="async"
-									loading="lazy"
+									loading={priority ? undefined : "lazy"}
+									fetchpriority={priority ? "high" : undefined}
 								/>
 							</div>
 						</div>
@@ -44,7 +46,7 @@ const imageAlt = post.data.featured_image?.alt || title;
 				}
 				<div class="box-text text-left">
 					<div class="box-text-inner blog-post-inner">
-						<h3 class="post-title is-large">{title}</h3>
+						<Heading class="post-title is-large">{title}</Heading>
 						<div class="is-divider"></div>
 						{excerpt && <p class="from_the_blog_excerpt">{excerpt}</p>}
 					</div>

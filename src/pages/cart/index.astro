@@ -1,0 +1,51 @@
+---
+import { getEmDashEntry } from "emdash";
+import Base from "../../layouts/Base.astro";
+
+const addedSlug = Astro.url.searchParams.get("added")?.trim() || "";
+const addedEntry = addedSlug
+	? (await getEmDashEntry("products", addedSlug)).entry
+	: null;
+---
+
+<Base
+	title="Cart & Wholesale Inquiry - Ogani"
+	description="Review your selected Ogani products and request wholesale pricing."
+	canonical={`${Astro.url.origin}/cart/`}
+	robots="noindex, follow"
+>
+	<div class="woocommerce container page-wrapper">
+		<div class="row">
+			<div class="large-12 col">
+				<h1 class="entry-title uppercase text-center">Wholesale Inquiry Cart</h1>
+				{
+					addedEntry ? (
+						<div class="woocommerce-notices-wrapper" role="status" aria-live="polite">
+							<div class="woocommerce-message message-wrapper">
+								<div class="message-container container success-color medium-text-center">
+									&ldquo;{addedEntry.data.title}&rdquo; has been added to your inquiry. Contact our wholesale team below for bulk pricing and shipping quotes.
+								</div>
+							</div>
+						</div>
+					) : (
+						<p class="cart-empty woocommerce-info text-center">
+							Your inquiry cart is currently empty.
+						</p>
+					)
+				}
+				<p class="return-to-shop text-center" style="margin-top: 1.5rem;">
+					<a class="button primary wc-backward" href="/shop/">
+						Browse Products
+					</a>
+					<a
+						class="button secondary"
+						href="/contact/"
+						style="margin-inline-start: 0.75rem;"
+					>
+						Request Wholesale Quote
+					</a>
+				</p>
+			</div>
+		</div>
+	</div>
+</Base>

@@ -2,10 +2,14 @@
 import { getEmDashCollection } from "emdash";
 import Base from "../../layouts/Base.astro";
 import PostCard from "../../components/PostCard.astro";
+import Pagination from "../../components/Pagination.astro";
 
-const { entries: posts, cacheHint } = await getEmDashCollection("posts", {
+const cursor = Astro.url.searchParams.get("cursor") || undefined;
+
+const { entries: posts, nextCursor, cacheHint } = await getEmDashCollection("posts", {
 	orderBy: { published_at: "desc" },
 	limit: 20,
+	cursor,
 });
 
 if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
@@ -26,11 +30,12 @@ if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 		<div class="row align-center">
 			<div class="large-10 col">
 				<div
-					class="row large-columns-3 medium-columns- small-columns-1 row-masonry"
-					data-packery-options='{"itemSelector": ".col", "gutter": 0, "presentageWidth" : true}'
+					class="row large-columns-3 medium-columns-2 small-columns-1 row-masonry"
+					data-packery-options='{"itemSelector": ".col", "gutter": 0, "percentPosition": true}'
 				>
 					{posts.map((post) => <PostCard post={post} />)}
 				</div>
+				<Pagination basePath="/posts" cursor={cursor} nextCursor={nextCursor} />
 			</div>
 		</div>
 	</div>

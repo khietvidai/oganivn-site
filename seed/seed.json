@@ -14023,8 +14023,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-22",
-                "url": "/wp-content/uploads/2025/03/474745259_1998074874010323_4064123605503796818_n-770x1024.jpg"
-              }
+                "url": "/wp-content/uploads/2025/03/474745259_1998074874010323_4064123605503796818_n-770x1024.jpg",
+                "alt": "SOFT DRIED PINEAPPLE (WITHOUT OR LESS SUGAR ADDED)"
+              },
+              "alt": "SOFT DRIED PINEAPPLE (WITHOUT OR LESS SUGAR ADDED)"
             },
             {
               "_type": "break",
@@ -14277,8 +14279,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-68",
-                "url": "/wp-content/uploads/2025/03/474838168_1998074820676995_7655535924169832074_n-1024x795.jpg"
-              }
+                "url": "/wp-content/uploads/2025/03/474838168_1998074820676995_7655535924169832074_n-1024x795.jpg",
+                "alt": "SOFT DRIED PINEAPPLE (WITHOUT OR LESS SUGAR ADDED)"
+              },
+              "alt": "SOFT DRIED PINEAPPLE (WITHOUT OR LESS SUGAR ADDED)"
             },
             {
               "_type": "break",
@@ -14418,8 +14422,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-95",
-                "url": "/wp-content/uploads/2025/03/474789749_1998074894010321_2818484976486707251_n-1024x655.jpg"
-              }
+                "url": "/wp-content/uploads/2025/03/474789749_1998074894010321_2818484976486707251_n-1024x655.jpg",
+                "alt": "SOFT DRIED PINEAPPLE (WITHOUT OR LESS SUGAR ADDED)"
+              },
+              "alt": "SOFT DRIED PINEAPPLE (WITHOUT OR LESS SUGAR ADDED)"
             },
             {
               "_type": "block",
@@ -15204,8 +15210,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-32",
-                "url": "/wp-content/uploads/2025/03/rung-dua-bay-mau-thumb-1-1024x681.jpg"
-              }
+                "url": "/wp-content/uploads/2025/03/rung-dua-bay-mau-thumb-1-1024x681.jpg",
+                "alt": "Crunchy Coconut (without oil using)"
+              },
+              "alt": "Crunchy Coconut (without oil using)"
             },
             {
               "_type": "break",
@@ -15218,8 +15226,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-36",
-                "url": "/wp-content/uploads/2025/03/crunchy-coconut-without-oil-using-74-1024x768.jpg"
-              }
+                "url": "/wp-content/uploads/2025/03/crunchy-coconut-without-oil-using-74-1024x768.jpg",
+                "alt": "Crunchy Coconut (without oil using)"
+              },
+              "alt": "Crunchy Coconut (without oil using)"
             },
             {
               "_type": "block",
@@ -15921,8 +15931,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-61",
-                "url": "/wp-content/uploads/2025/03/Tui-ZIP-Dragon-1024x683.png"
-              }
+                "url": "/wp-content/uploads/2025/03/Tui-ZIP-Dragon-1024x683.png",
+                "alt": "Crunchy, Oil-Free Dried Dragon Fruit (Red or White)"
+              },
+              "alt": "Crunchy, Oil-Free Dried Dragon Fruit (Red or White)"
             },
             {
               "_type": "break",
@@ -15935,8 +15947,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-64",
-                "url": "/wp-content/uploads/2025/03/thanh-long-say-deo-do-hoac-trang-khong-su-dung-dau-20-1024x768.jpg"
-              }
+                "url": "/wp-content/uploads/2025/03/thanh-long-say-deo-do-hoac-trang-khong-su-dung-dau-20-1024x768.jpg",
+                "alt": "Crunchy, Oil-Free Dried Dragon Fruit (Red or White)"
+              },
+              "alt": "Crunchy, Oil-Free Dried Dragon Fruit (Red or White)"
             },
             {
               "_type": "block",
@@ -16818,8 +16832,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-106",
-                "url": "/wp-content/uploads/2025/03/Tui-ZIP-Mango-1024x683.png"
-              }
+                "url": "/wp-content/uploads/2025/03/Tui-ZIP-Mango-1024x683.png",
+                "alt": "Dried Mango Fruit: Nutrition, Benefits, Types & Uses"
+              },
+              "alt": "Dried Mango Fruit: Nutrition, Benefits, Types & Uses"
             },
             {
               "_type": "block",
@@ -16942,8 +16958,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-126",
-                "url": "/wp-content/uploads/2025/04/Jack1-1024x768.jpg"
-              }
+                "url": "/wp-content/uploads/2025/04/Jack1-1024x768.jpg",
+                "alt": "Dried Mango Fruit: Nutrition, Benefits, Types & Uses"
+              },
+              "alt": "Dried Mango Fruit: Nutrition, Benefits, Types & Uses"
             },
             {
               "_type": "block",
@@ -17599,8 +17617,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-4",
-                "url": "/wp-content/uploads/2025/04/Red-Dragon-Fruit-0-scaled-1-1024x611.jpg"
-              }
+                "url": "/wp-content/uploads/2025/04/Red-Dragon-Fruit-0-scaled-1-1024x611.jpg",
+                "alt": "Dried Red Dragon Fruit: The Complete Guide to Benefits, Nutrition, Uses & Buying"
+              },
+              "alt": "Dried Red Dragon Fruit: The Complete Guide to Benefits, Nutrition, Uses & Buying"
             },
             {
               "_type": "block",
@@ -17704,8 +17724,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-22",
-                "url": "/wp-content/uploads/2025/04/Drango-red-1024x768.jpg"
-              }
+                "url": "/wp-content/uploads/2025/04/Drango-red-1024x768.jpg",
+                "alt": "Dried Red Dragon Fruit: The Complete Guide to Benefits, Nutrition, Uses & Buying"
+              },
+              "alt": "Dried Red Dragon Fruit: The Complete Guide to Benefits, Nutrition, Uses & Buying"
             },
             {
               "_type": "block",
@@ -17963,8 +17985,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-66",
-                "url": "/wp-content/uploads/2025/04/Ogani1-1024x474.png"
-              }
+                "url": "/wp-content/uploads/2025/04/Ogani1-1024x474.png",
+                "alt": "Dried Red Dragon Fruit: The Complete Guide to Benefits, Nutrition, Uses & Buying"
+              },
+              "alt": "Dried Red Dragon Fruit: The Complete Guide to Benefits, Nutrition, Uses & Buying"
             },
             {
               "_type": "block",
@@ -18036,8 +18060,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-4",
-                "url": "/wp-content/uploads/2025/04/organic-freeze-dried-dragon-fruit-powder-pitaya-powder-1024x1024.jpg"
-              }
+                "url": "/wp-content/uploads/2025/04/organic-freeze-dried-dragon-fruit-powder-pitaya-powder-1024x1024.jpg",
+                "alt": "Red Dragon Fruit Powder (Pink Pitaya): Benefits, Uses & Buying Tips"
+              },
+              "alt": "Red Dragon Fruit Powder (Pink Pitaya): Benefits, Uses & Buying Tips"
             },
             {
               "_type": "block",
@@ -18437,8 +18463,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-4",
-                "url": "/wp-content/uploads/2025/04/i_Stock_935484476_min_40d8f1331c-1024x683.webp"
-              }
+                "url": "/wp-content/uploads/2025/04/i_Stock_935484476_min_40d8f1331c-1024x683.webp",
+                "alt": "Soft Dried Fruits: Texture, Health, and Uses"
+              },
+              "alt": "Soft Dried Fruits: Texture, Health, and Uses"
             },
             {
               "_type": "block",
@@ -18630,8 +18658,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-37",
-                "url": "/wp-content/uploads/2025/04/Ogani1-1024x474.png"
-              }
+                "url": "/wp-content/uploads/2025/04/Ogani1-1024x474.png",
+                "alt": "Soft Dried Fruits: Texture, Health, and Uses"
+              },
+              "alt": "Soft Dried Fruits: Texture, Health, and Uses"
             },
             {
               "_type": "block",
@@ -27966,8 +27996,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-31",
-                "url": "/wp-content/uploads/2026/01/dragon-fruit-smoothie-recipes-4-300x169.jpg"
-              }
+                "url": "/wp-content/uploads/2026/01/dragon-fruit-smoothie-recipes-4-300x169.jpg",
+                "alt": "Dragon Fruit Smoothie Recipes: Easy Pink Smoothies In Minutes"
+              },
+              "alt": "Dragon Fruit Smoothie Recipes: Easy Pink Smoothies In Minutes"
             },
             {
               "_type": "block",
@@ -48380,8 +48412,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-41",
-                "url": "/wp-content/uploads/2025/12/recipe-for-dried-mango-4-300x169.jpg"
-              }
+                "url": "/wp-content/uploads/2025/12/recipe-for-dried-mango-4-300x169.jpg",
+                "alt": "Recipe For Dried Mango: Your Complete Guide to Making Perfect Chewy Slices"
+              },
+              "alt": "Recipe For Dried Mango: Your Complete Guide to Making Perfect Chewy Slices"
             },
             {
               "_type": "block",
@@ -50561,8 +50595,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-15",
-                "url": "/wp-content/uploads/2025/12/how-to-dry-dragon-fruit-2-300x169.jpg"
-              }
+                "url": "/wp-content/uploads/2025/12/how-to-dry-dragon-fruit-2-300x169.jpg",
+                "alt": "How to Dry Dragon Fruit: Complete Step-by-Step Guide"
+              },
+              "alt": "How to Dry Dragon Fruit: Complete Step-by-Step Guide"
             },
             {
               "_type": "block",
@@ -91849,8 +91885,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-33",
-                "url": "/wp-content/uploads/2025/11/dried-mango-vitamin-c-4-300x169.jpg"
-              }
+                "url": "/wp-content/uploads/2025/11/dried-mango-vitamin-c-4-300x169.jpg",
+                "alt": "Dried Mango Vitamin C: What You Need To Know About This Nutrient"
+              },
+              "alt": "Dried Mango Vitamin C: What You Need To Know About This Nutrient"
             },
             {
               "_type": "block",
@@ -112504,8 +112542,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-74",
-                "url": "/wp-content/uploads/2025/10/dragon-fruit-powder-uses-4-300x169.jpg"
-              }
+                "url": "/wp-content/uploads/2025/10/dragon-fruit-powder-uses-4-300x169.jpg",
+                "alt": "Dragon Fruit Powder Uses: Complete Guide"
+              },
+              "alt": "Dragon Fruit Powder Uses: Complete Guide"
             },
             {
               "_type": "block",
@@ -113086,8 +113126,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-43",
-                "url": "/wp-content/uploads/2025/10/dragon-fruit-powder-smoothie-1-300x169.jpg"
-              }
+                "url": "/wp-content/uploads/2025/10/dragon-fruit-powder-smoothie-1-300x169.jpg",
+                "alt": "Dragon Fruit Powder Smoothie Recipe Guide"
+              },
+              "alt": "Dragon Fruit Powder Smoothie Recipe Guide"
             },
             {
               "_type": "block",
@@ -121120,8 +121162,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-15",
-                "url": "/wp-content/uploads/2025/10/pink-dragon-fruit-benefits-2-1-300x169.jpg"
-              }
+                "url": "/wp-content/uploads/2025/10/pink-dragon-fruit-benefits-2-1-300x169.jpg",
+                "alt": "Pink Dragon Fruit Benefits: 7 Powerful Reasons to Add This Tropical Gem to Your Diet"
+              },
+              "alt": "Pink Dragon Fruit Benefits: 7 Powerful Reasons to Add This Tropical Gem to Your Diet"
             },
             {
               "_type": "block",
@@ -178657,8 +178701,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-49",
-                "url": "/wp-content/uploads/2025/09/is-unsweetened-dried-mango-healthy-5-300x169.jpg"
-              }
+                "url": "/wp-content/uploads/2025/09/is-unsweetened-dried-mango-healthy-5-300x169.jpg",
+                "alt": "Is Unsweetened Dried Mango Healthy? Complete Nutrition Guide"
+              },
+              "alt": "Is Unsweetened Dried Mango Healthy? Complete Nutrition Guide"
             },
             {
               "_type": "block",
@@ -239583,8 +239629,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-16",
-                "url": "/wp-content/uploads/2025/03/Tui-ZIP-Dragon-1024x683.png"
-              }
+                "url": "/wp-content/uploads/2025/03/Tui-ZIP-Dragon-1024x683.png",
+                "alt": "11+ Delicious Ways to Eat And Use Dried Red Dragon Fruit (Recipes Included)"
+              },
+              "alt": "11+ Delicious Ways to Eat And Use Dried Red Dragon Fruit (Recipes Included)"
             },
             {
               "_type": "block",
@@ -239668,8 +239716,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-30",
-                "url": "/wp-content/uploads/2025/04/Ogani1-1024x474.png"
-              }
+                "url": "/wp-content/uploads/2025/04/Ogani1-1024x474.png",
+                "alt": "11+ Delicious Ways to Eat And Use Dried Red Dragon Fruit (Recipes Included)"
+              },
+              "alt": "11+ Delicious Ways to Eat And Use Dried Red Dragon Fruit (Recipes Included)"
             },
             {
               "_type": "block",
@@ -240015,8 +240065,10 @@
               "asset": {
                 "_type": "reference",
                 "_ref": "wp-img-86",
-                "url": "/wp-content/uploads/2025/04/Red-Dragon-Fruit-0-scaled-1-1024x611.jpg"
-              }
+                "url": "/wp-content/uploads/2025/04/Red-Dragon-Fruit-0-scaled-1-1024x611.jpg",
+                "alt": "11+ Delicious Ways to Eat And Use Dried Red Dragon Fruit (Recipes Included)"
+              },
+              "alt": "11+ Delicious Ways to Eat And Use Dried Red Dragon Fruit (Recipes Included)"
             },
             {
               "_type": "block",
@@ -257036,7 +257088,7 @@
             {
               "_type": "block",
               "_key": "b11",
-              "style": "h3",
+              "style": "h2",
               "children": [
                 {
                   "_type": "span",
@@ -257138,7 +257190,7 @@
             {
               "_type": "block",
               "_key": "b5",
-              "style": "h3",
+              "style": "h2",
               "children": [
                 {
                   "_type": "span",

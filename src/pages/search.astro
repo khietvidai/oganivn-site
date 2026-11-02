@@ -11,6 +11,17 @@ const { items: results } =
 				limit: 20,
 			})
 		: { items: [] };
+
+function sanitizeSnippet(raw: string): string {
+	return raw
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#39;")
+		.replace(/&lt;mark&gt;/gi, "<mark>")
+		.replace(/&lt;\/mark&gt;/gi, "</mark>");
+}
 ---
 
 <Base
@@ -31,29 +42,38 @@ const { items: results } =
 
 		<div class="row align-center">
 			<div class="large-10 col">
-				<form role="search" method="get" class="searchform mb" action="/search">
-					<div class="flex-row relative">
-						<div class="flex-col flex-grow">
-							<input
-								type="search"
-								class="search-field mb-0"
-								placeholder="Enter search keyword..."
-								value={query}
-								name="q"
-							/>
+				<search>
+					<form method="get" class="searchform mb" action="/search">
+						<div class="flex-row relative">
+							<div class="flex-col flex-grow">
+								<label class="screen-reader-text" for="page-search-input">
+									Search for:
+								</label>
+								<input
+									type="search"
+									id="page-search-input"
+									class="search-field mb-0"
+									placeholder="Enter search keyword..."
+									value={query}
+									name="q"
+									autocorrect="off"
+									autocapitalize="off"
+									spellcheck="false"
+								/>
+							</div>
+							<div class="flex-col">
+								<button
+									type="submit"
+									value="Search"
+									class="ux-search-submit submit-button secondary button icon mb-0"
+									aria-label="Submit"
+								>
+									<i class="icon-search" aria-hidden="true"></i>
+								</button>
+							</div>
 						</div>
-						<div class="flex-col">
-							<button
-								type="submit"
-								value="Search"
-								class="ux-search-submit submit-button secondary button icon mb-0"
-								aria-label="Submit"
-							>
-								<i class="icon-search"></i>
-							</button>
-						</div>
-					</div>
-				</form>
+					</form>
+				</search>
 
 				{
 					results.length > 0 ? (
@@ -71,12 +91,12 @@ const { items: results } =
 												<div class="box box-text-bottom box-blog-post has-hover">
 													<div class="box-text text-left">
 														<div class="box-text-inner blog-post-inner">
-															<h3 class="post-title is-large">{item.title}</h3>
+															<h2 class="post-title is-large">{item.title}</h2>
 															<div class="is-divider" />
 															{item.snippet && (
 																<p
 																	class="from_the_blog_excerpt"
-																	set:html={item.snippet}
+																	set:html={sanitizeSnippet(item.snippet)}
 																/>
 															)}
 														</div>
@@ -90,7 +110,7 @@ const { items: results } =
 						</div>
 					) : (
 						query.length >= 2 && (
-							<p class="text-center">
+							<p class="text-center" role="status" aria-live="polite">
 								No results found for &ldquo;{query}&rdquo;.
 							</p>
 						)

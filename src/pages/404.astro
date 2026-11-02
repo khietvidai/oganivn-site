@@ -4,13 +4,14 @@ import Base from "../layouts/Base.astro";
 
 <Base title="Page not found - Ogani">
 	<div id="primary" class="content-area">
-		<main id="main" class="site-main container pt" role="main">
+		<div class="site-main container pt">
 			<section class="error-404 not-found mt mb">
 				<div class="row">
 					<div class="col medium-3">
 						<span
 							class="header-font"
 							style="font-size: 6em; font-weight: bold; opacity: .3"
+							aria-hidden="true"
 						>
 							404
 						</span>
@@ -24,36 +25,40 @@ import Base from "../layouts/Base.astro";
 								It looks like nothing was found at this location. Maybe try one
 								of the links below or a search?
 							</p>
-							<form
-								method="get"
-								class="searchform"
-								action="/search"
-								role="search"
-							>
-								<div class="flex-row relative">
-									<div class="flex-col flex-grow">
-										<input
-											type="search"
-											class="search-field mb-0"
-											name="q"
-											placeholder="Search..."
-										/>
+							<search>
+								<form method="get" class="searchform" action="/search">
+									<div class="flex-row relative">
+										<div class="flex-col flex-grow">
+											<label class="screen-reader-text" for="error-404-search">
+												Search for:
+											</label>
+											<input
+												type="search"
+												id="error-404-search"
+												class="search-field mb-0"
+												name="q"
+												placeholder="Search..."
+												autocorrect="off"
+												autocapitalize="off"
+												spellcheck="false"
+											/>
+										</div>
+										<div class="flex-col">
+											<button
+												type="submit"
+												class="ux-search-submit submit-button secondary button icon mb-0"
+												aria-label="Submit"
+											>
+												<i class="icon-search" aria-hidden="true"></i>
+											</button>
+										</div>
 									</div>
-									<div class="flex-col">
-										<button
-											type="submit"
-											class="ux-search-submit submit-button secondary button icon mb-0"
-											aria-label="Submit"
-										>
-											<i class="icon-search"></i>
-										</button>
-									</div>
-								</div>
-							</form>
+								</form>
+							</search>
 						</div>
 					</div>
 				</div>
 			</section>
-		</main>
+		</div>
 	</div>
 </Base>

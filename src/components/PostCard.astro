@@ -19,6 +19,9 @@ const excerpt = post.data.excerpt
 		: post.data.excerpt
 	: "";
 const imageSrc = post.data.featured_image?.src || "";
+const thumbSrc = imageSrc
+	? imageSrc.replace(/\.(?:jpe?g|png|webp)$/i, "-300x200.webp")
+	: "";
 const imageAlt = post.data.featured_image?.alt || title;
 ---
 
@@ -33,7 +36,9 @@ const imageAlt = post.data.featured_image?.alt || title;
 								<img
 									width="300"
 									height="200"
-									src={imageSrc}
+									src={thumbSrc || imageSrc}
+									srcset={thumbSrc && thumbSrc !== imageSrc ? `${thumbSrc} 300w, ${imageSrc} 1024w` : undefined}
+									sizes={thumbSrc && thumbSrc !== imageSrc ? "(max-width: 549px) 92vw, 300px" : undefined}
 									class="attachment-medium size-medium wp-post-image"
 									alt={imageAlt}
 									decoding="async"

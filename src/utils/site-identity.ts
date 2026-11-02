@@ -18,7 +18,7 @@ const DEFAULT_SITE_TAGLINE =
 const DEFAULT_SITE_LOGO: MediaReference = {
 	mediaId: "wp-media-418",
 	alt: "Ogani",
-	url: "/wp-content/uploads/2025/06/ogani-logo.png",
+	url: "/wp-content/uploads/2025/06/ogani-logo.webp",
 };
 
 export function resolveBlogSiteIdentity(settings?: BlogSiteIdentitySettings) {

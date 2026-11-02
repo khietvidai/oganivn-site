@@ -1,0 +1,84 @@
+---
+import { getEmDashCollection } from "emdash";
+import Base from "../../../layouts/Base.astro";
+import PostCard from "../../../components/PostCard.astro";
+
+const pageParam = Number(Astro.params.page || "1");
+if (!Number.isInteger(pageParam) || pageParam < 1) {
+	return new Response(null, { status: 404, statusText: "Not Found" });
+}
+if (pageParam === 1) {
+	return Astro.redirect("/blog/", 301);
+}
+
+const POSTS_PER_PAGE = 10;
+const offset = (pageParam - 1) * POSTS_PER_PAGE;
+
+const { entries: allPosts, cacheHint } = await getEmDashCollection("posts", {
+	orderBy: { published_at: "desc" },
+	limit: 500,
+});
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+
+const visiblePosts = allPosts.slice(offset, offset + POSTS_PER_PAGE);
+if (visiblePosts.length === 0) {
+	return new Response(null, { status: 404, statusText: "Not Found" });
+}
+
+const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
+const hasMore = pageParam < totalPages;
+const prevHref = pageParam === 2 ? "/blog/" : `/blog/page/${pageParam - 1}/`;
+const nextHref = `/blog/page/${pageParam + 1}/`;
+---
+
+<Base
+	title={`Blog - Page ${pageParam} - Ogani`}
+	description={`Page ${pageParam} of articles and guides from Ogani Vietnam.`}
+	canonical={`${Astro.url.origin}/blog/page/${pageParam}/`}
+	bodyClass="archive paged category category-blog theme-flatsome woocommerce-no-js lightbox nav-dropdown-has-arrow nav-dropdown-has-shadow nav-dropdown-has-border"
+>
+	<div id="content" class="blog-wrapper blog-archive page-wrapper">
+		<header class="archive-page-header">
+			<div class="row">
+				<div class="large-12 text-center col">
+					<h1 class="page-title is-large uppercase">
+						Category Archives: <span>Blog</span>
+					</h1>
+				</div>
+			</div>
+		</header>
+
+		<div class="row align-center">
+			<div class="large-10 col">
+				<div
+					class="row large-columns-3 medium-columns- small-columns-1 row-masonry"
+					data-packery-options='{"itemSelector": ".col", "gutter": 0, "presentageWidth" : true}'
+				>
+					{visiblePosts.map((post) => <PostCard post={post} />)}
+				</div>
+
+				<ul class="page-numbers nav-pagination links text-center">
+					<li>
+						<a class="prev page-number" href={prevHref}>
+							<i class="icon-angle-left"></i>
+						</a>
+					</li>
+					<li>
+						<span aria-current="page" class="page-number current">
+							{pageParam}
+						</span>
+					</li>
+					{
+						hasMore && (
+							<li>
+								<a class="next page-number" href={nextHref}>
+									<i class="icon-angle-right" />
+								</a>
+							</li>
+						)
+					}
+				</ul>
+			</div>
+		</div>
+	</div>
+</Base>

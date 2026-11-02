@@ -13,3 +13,9 @@ data.db-*
 !.env.example
 .dev.vars
 .dev.vars.*
+
+# WordPress backup directory & credentials
+wp/
+la5idzd_prod.sql
+ftpsitecu.txt
+.DS_Store

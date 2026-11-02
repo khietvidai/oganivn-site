@@ -1,0 +1,220 @@
+---
+import {
+	getEmDashEntry,
+	getEmDashCollection,
+	getTaxonomyTermsWithCacheHint,
+	getSeoMeta,
+	getSiteSettings,
+} from "emdash";
+import { PortableText } from "emdash/ui";
+import Base from "../layouts/Base.astro";
+import PostDetailView from "../components/PostDetailView.astro";
+import PostCard from "../components/PostCard.astro";
+import ProductCard from "../components/ProductCard.astro";
+import { resolveBlogSiteIdentity } from "../utils/site-identity";
+import flatsomeTemplates from "../data/wp-flatsome-templates.json";
+
+const { slug } = Astro.params;
+if (!slug) {
+	return new Response(null, { status: 404, statusText: "Not Found" });
+}
+
+if (slug === "home") {
+	return Astro.redirect("/", 301);
+}
+if (slug === "blog") {
+	return Astro.redirect("/blog/", 301);
+}
+if (slug === "shop") {
+	return Astro.redirect("/shop/", 301);
+}
+
+// 1. Check if slug is a published blog post (330 posts live at /{slug}/)
+const { entry: post, cacheHint: postCacheHint } = await getEmDashEntry(
+	"posts",
+	slug,
+);
+
+// 2. If not a post, check page, category, and product_cat in parallel
+const [pageRes, catRes, prodCatRes] = post
+	? [null, null, null]
+	: await Promise.all([
+			getEmDashEntry("pages", slug),
+			getTaxonomyTermsWithCacheHint("category"),
+			getTaxonomyTermsWithCacheHint("product_cat"),
+		]);
+
+const page = pageRes?.entry ?? null;
+const category = catRes?.data.find((t) => t.slug === slug) ?? null;
+const productCat = prodCatRes?.data.find((t) => t.slug === slug) ?? null;
+
+if (!post && !page && !category && !productCat) {
+	return new Response(null, { status: 404, statusText: "Not Found" });
+}
+
+if (Astro.cache?.enabled) {
+	if (post) Astro.cache.set(postCacheHint);
+	if (pageRes) Astro.cache.set(pageRes.cacheHint);
+	if (catRes && category) Astro.cache.set(catRes.cacheHint);
+	if (prodCatRes && productCat) Astro.cache.set(prodCatRes.cacheHint);
+}
+
+const { siteTitle } = resolveBlogSiteIdentity(await getSiteSettings());
+
+// Fetch category posts if this slug is a category archive
+let catPosts: Array<any> = [];
+if (!post && category) {
+	const { entries: cPosts, cacheHint: cHint } = await getEmDashCollection(
+		"posts",
+		{
+			where: { category: slug },
+			orderBy: { published_at: "desc" },
+			limit: 100,
+		},
+	);
+	if (Astro.cache?.enabled) Astro.cache.set(cHint);
+	catPosts = cPosts;
+}
+
+// Fetch products if this slug is a product_cat shortcut (e.g. /dried-fruits/, /jam/)
+let catProducts: Array<any> = [];
+if (!post && !category && productCat) {
+	const { entries: prods, cacheHint: pHint } = await getEmDashCollection(
+		"products",
+		{
+			where: { product_cat: slug },
+			limit: 100,
+		},
+	);
+	if (Astro.cache?.enabled) Astro.cache.set(pHint);
+	catProducts = prods;
+}
+
+const pageRaw = (page?.data ?? {}) as Record<string, any>;
+const pageSeo = page
+	? getSeoMeta(page, {
+			siteTitle,
+			siteUrl: Astro.url.origin,
+			path: `/${slug}/`,
+			defaultTitle: pageRaw.seo_title || undefined,
+			defaultDescription: pageRaw.seo_description || undefined,
+		})
+	: null;
+
+const pagesMainMap = flatsomeTemplates.pagesMain as Record<string, string>;
+const exactPageMainHtml = pagesMainMap[slug];
+---
+
+{
+	post ? (
+		<PostDetailView post={post} slug={slug} />
+	) : category ? (
+		<Base
+			title={
+				pageRaw.seo_title || pageSeo?.title || `${category.label} - Ogani`
+			}
+			description={
+				pageSeo?.description ||
+				`Browse articles and guides in ${category.label} on Ogani.`
+			}
+			canonical={`${Astro.url.origin}/${slug}/`}
+			bodyClass={`archive category category-${slug} theme-flatsome woocommerce-no-js lightbox nav-dropdown-has-arrow nav-dropdown-has-shadow nav-dropdown-has-border`}
+		>
+			<div id="content" class="blog-wrapper blog-archive page-wrapper">
+				<header class="archive-page-header">
+					<div class="row">
+						<div class="large-12 text-center col">
+							<h1 class="page-title is-large uppercase">
+								Category Archives: <span>{category.label}</span>
+							</h1>
+						</div>
+					</div>
+				</header>
+
+				<div class="row align-center">
+					<div class="large-10 col">
+						{catPosts.length > 0 && (
+							<div
+								class="row large-columns-3 medium-columns- small-columns-1 row-masonry"
+								data-packery-options='{"itemSelector": ".col", "gutter": 0, "presentageWidth" : true}'
+							>
+								{catPosts.map((p) => (
+									<PostCard post={p} />
+								))}
+							</div>
+						)}
+
+						{page && (
+							<article class="post type-page status-publish hentry">
+								<div class="article-inner">
+									<div class="entry-content single-page">
+										<PortableText value={page.data.content} />
+									</div>
+								</div>
+							</article>
+						)}
+					</div>
+				</div>
+			</div>
+		</Base>
+	) : page ? (
+		<Base
+			title={pageRaw.seo_title || pageSeo?.title || page.data.title}
+			pageTitle={pageSeo?.ogTitle}
+			description={pageSeo?.description}
+			image={pageSeo?.ogImage}
+			canonical={`${Astro.url.origin}/${slug}/`}
+			robots={pageSeo?.robots}
+			bodyClass={`page-template-default page wp-singular theme-flatsome woocommerce-no-js lightbox nav-dropdown-has-arrow nav-dropdown-has-shadow nav-dropdown-has-border`}
+			content={{ collection: "pages", id: page.data.id, slug }}
+		>
+			{exactPageMainHtml ? (
+				<Fragment set:html={exactPageMainHtml} />
+			) : (
+				<div class="row page-wrapper">
+					<div id="content" class="large-12 col" role="main">
+						<header class="entry-header text-center">
+							<h1 class="entry-title">{page.data.title}</h1>
+							<div class="is-divider medium" />
+						</header>
+						<div class="entry-content">
+							<PortableText value={page.data.content} />
+						</div>
+					</div>
+				</div>
+			)}
+		</Base>
+	) : (
+		<Base
+			title={`${productCat?.label} - Ogani`}
+			description={`Explore ${productCat?.label} products from Ogani Vietnam.`}
+			canonical={`${Astro.url.origin}/product-category/${slug}/`}
+			bodyClass="archive tax-product_cat theme-flatsome woocommerce woocommerce-page woocommerce-no-js lightbox nav-dropdown-has-arrow nav-dropdown-has-shadow nav-dropdown-has-border"
+		>
+			<div class="shop-page-title category-page-title page-title">
+				<div class="page-title-inner flex-row medium-flex-wrap container">
+					<div class="flex-col flex-grow medium-text-center">
+						<div class="is-large">
+							<nav class="woocommerce-breadcrumb breadcrumbs uppercase">
+								<a href="/">Home</a> <span class="divider">&#47;</span>{" "}
+								<a href="/shop/">Shop</a> <span class="divider">&#47;</span>{" "}
+								{productCat?.label}
+							</nav>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row category-page-row">
+				<div class="col large-12">
+					<div class="shop-container">
+						<div class="products row row-small large-columns-4 medium-columns-3 small-columns-2 equalize-box">
+							{catProducts.map((product, i) => (
+								<ProductCard product={product} priority={i < 4} />
+							))}
+						</div>
+					</div>
+				</div>
+			</div>
+		</Base>
+	)
+}

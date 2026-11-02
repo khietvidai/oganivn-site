@@ -1,0 +1,46 @@
+---
+import { getEmDashCollection } from "emdash";
+import Base from "../../layouts/Base.astro";
+import ProductCard from "../../components/ProductCard.astro";
+
+const { entries: products, cacheHint } = await getEmDashCollection("products", {
+	limit: 100,
+});
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+---
+
+<Base
+	title="Shop - Ogani"
+	description="Explore Ogani tropical soft-dried fruits, crunchy oil-free dried fruit snacks, red dragon fruit powder, and Vietnamese coffee."
+	canonical={`${Astro.url.origin}/shop/`}
+	bodyClass="archive post-type-archive post-type-archive-product theme-flatsome woocommerce-shop woocommerce woocommerce-page woocommerce-no-js lightbox nav-dropdown-has-arrow nav-dropdown-has-shadow nav-dropdown-has-border"
+>
+	<div class="shop-page-title category-page-title page-title">
+		<div class="page-title-inner flex-row medium-flex-wrap container">
+			<div class="flex-col flex-grow medium-text-center">
+				<div class="is-large">
+					<nav class="woocommerce-breadcrumb breadcrumbs uppercase">
+						<a href="/">Home</a> <span class="divider">&#47;</span> Shop
+					</nav>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row category-page-row">
+		<div class="col large-12">
+			<div class="shop-container">
+				<div class="woocommerce-notices-wrapper"></div>
+				<div
+					class="products row row-small large-columns-4 medium-columns-3 small-columns-2 equalize-box"
+				>
+					{
+						products.map((product, i) => (
+							<ProductCard product={product} priority={i < 4} />
+						))
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</Base>

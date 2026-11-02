@@ -1,0 +1,90 @@
+---
+import type { ContentEntry, InferCollectionData } from "emdash";
+import flatsomeTemplates from "../data/wp-flatsome-templates.json";
+
+interface Props {
+	product: ContentEntry<InferCollectionData<"products">>;
+	categories?: Array<{ slug: string; label: string }>;
+	headingLevel?: 2 | 3;
+	priority?: boolean;
+}
+
+const { product, priority = false } = Astro.props;
+const href = `/product/${product.id}/`;
+const title = product.data.title || "Untitled Product";
+const cardMetaMap = flatsomeTemplates.productCardMeta as Record<
+	string,
+	{ badge?: string; frontImg?: string; backImg?: string; priceHtml?: string }
+>;
+const meta = cardMetaMap[product.id] ?? {};
+const frontImg = meta.frontImg || product.data.featured_image?.src || "";
+const backImg = meta.backImg || "";
+const badge = meta.badge || "";
+const priceHtml =
+	meta.priceHtml ||
+	'<span class="price"><span class="amount red">Liên hệ</span><span class="stars_info"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></span></span>';
+---
+
+<div class="product-small col has-hover product type-product status-publish instock has-post-thumbnail shipping-taxable product-type-simple">
+	<div class="col-inner">
+		<div class="badge-container absolute left top z-1">
+			{
+				badge && (
+					<div class="callout badge badge-square">
+						<div class="badge-inner secondary on-sale">
+							<span class="onsale">{badge}</span>
+						</div>
+					</div>
+				)
+			}
+		</div>
+		<div class="product-small box">
+			<div class="box-image">
+				<div class="image-fade_in_back">
+					<a href={href} aria-label={title}>
+						{
+							frontImg && (
+								<img
+									width="300"
+									height="300"
+									src={frontImg}
+									class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail"
+									alt={product.data.featured_image?.alt || title}
+									decoding="async"
+									loading={priority ? "eager" : "lazy"}
+								/>
+							)
+						}
+						{
+							backImg && (
+								<img
+									width="300"
+									height="300"
+									src={backImg}
+									class="show-on-hover absolute fill hide-for-small back-image"
+									alt=""
+									decoding="async"
+									loading="lazy"
+								/>
+							)
+						}
+					</a>
+				</div>
+			</div>
+
+			<div class="box-text box-text-products">
+				<div class="title-wrapper">
+					<p class="name product-title woocommerce-loop-product__title">
+						<a
+							href={href}
+							class="woocommerce-LoopProduct-link woocommerce-loop-product__link"
+						>
+							{title}
+						</a>
+					</p>
+				</div>
+				<div class="price-wrapper" set:html={priceHtml} />
+			</div>
+		</div>
+	</div>
+</div>

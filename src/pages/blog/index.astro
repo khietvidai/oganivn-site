@@ -1,0 +1,81 @@
+---
+import { getEmDashCollection } from "emdash";
+import Base from "../../layouts/Base.astro";
+import PostCard from "../../components/PostCard.astro";
+
+const POSTS_PER_PAGE = 10;
+
+const { entries: posts, cacheHint } = await getEmDashCollection("posts", {
+	orderBy: { published_at: "desc" },
+	limit: POSTS_PER_PAGE + 1,
+});
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+
+const visiblePosts = posts.slice(0, POSTS_PER_PAGE);
+const hasMore = posts.length > POSTS_PER_PAGE;
+---
+
+<Base
+	title="Blog - Ogani"
+	description="Articles, guides, and nutrition facts on tropical soft-dried fruits from Ogani Vietnam."
+	canonical={`${Astro.url.origin}/blog/`}
+	bodyClass="archive category category-blog theme-flatsome woocommerce-no-js lightbox nav-dropdown-has-arrow nav-dropdown-has-shadow nav-dropdown-has-border"
+>
+	<div id="content" class="blog-wrapper blog-archive page-wrapper">
+		<header class="archive-page-header">
+			<div class="row">
+				<div class="large-12 text-center col">
+					<h1 class="page-title is-large uppercase">
+						Category Archives: <span>Blog</span>
+					</h1>
+				</div>
+			</div>
+		</header>
+
+		<div class="row align-center">
+			<div class="large-10 col">
+				<div
+					class="row large-columns-3 medium-columns- small-columns-1 row-masonry"
+					data-packery-options='{"itemSelector": ".col", "gutter": 0, "presentageWidth" : true}'
+				>
+					{visiblePosts.map((post) => <PostCard post={post} />)}
+				</div>
+
+				{
+					hasMore && (
+						<ul class="page-numbers nav-pagination links text-center">
+							<li>
+								<span aria-current="page" class="page-number current">
+									1
+								</span>
+							</li>
+							<li>
+								<a class="page-number" href="/blog/page/2/">
+									2
+								</a>
+							</li>
+							<li>
+								<a class="page-number" href="/blog/page/3/">
+									3
+								</a>
+							</li>
+							<li>
+								<span class="page-number dots">&hellip;</span>
+							</li>
+							<li>
+								<a class="page-number" href="/blog/page/33/">
+									33
+								</a>
+							</li>
+							<li>
+								<a class="next page-number" href="/blog/page/2/">
+									<i class="icon-angle-right" />
+								</a>
+							</li>
+						</ul>
+					)
+				}
+			</div>
+		</div>
+	</div>
+</Base>

@@ -1,0 +1,191 @@
+---
+import {
+	getSeoMeta,
+	getSiteSettings,
+	type ContentEntry,
+	type InferCollectionData,
+} from "emdash";
+import { PortableText } from "emdash/ui";
+import { Comments, CommentForm } from "emdash/ui/comments";
+import Base from "../layouts/Base.astro";
+import { resolveBlogSiteIdentity } from "../utils/site-identity";
+
+interface Props {
+	post: ContentEntry<InferCollectionData<"posts">>;
+	slug: string;
+}
+
+const { post, slug } = Astro.props;
+
+function getImageUrl(img: unknown): string | undefined {
+	if (!img || typeof img !== "object") return undefined;
+	const image = img as Record<string, unknown>;
+	if (typeof image.src === "string" && image.src) {
+		return image.src.startsWith("http")
+			? image.src
+			: `${Astro.url.origin}${image.src}`;
+	}
+	const meta = image.meta as Record<string, unknown> | undefined;
+	const storageKey =
+		(typeof meta?.storageKey === "string" ? meta.storageKey : undefined) ||
+		(typeof image.id === "string" ? image.id : undefined);
+	if (storageKey) {
+		return `${Astro.url.origin}/_emdash/api/media/file/${storageKey}`;
+	}
+	return undefined;
+}
+
+const featuredImageUrl = getImageUrl(post.data.featured_image);
+const { siteTitle } = resolveBlogSiteIdentity(await getSiteSettings());
+const rawData = post.data as Record<string, any>;
+
+const seo = getSeoMeta(post, {
+	siteTitle,
+	siteUrl: Astro.url.origin,
+	path: `/${post.id}/`,
+	defaultOgImage: featuredImageUrl,
+	defaultTitle: rawData.seo_title || undefined,
+	defaultDescription: rawData.seo_description || undefined,
+});
+
+const canonicalUrl = `${Astro.url.origin}/${post.id}/`;
+const encodedUrl = encodeURIComponent(canonicalUrl);
+const encodedTitle = encodeURIComponent(post.data.title || "");
+
+const wpPubIso =
+	typeof rawData.wp_published_at === "string" && rawData.wp_published_at
+		? rawData.wp_published_at
+		: null;
+const wpModIso =
+	typeof rawData.wp_updated_at === "string" && rawData.wp_updated_at
+		? rawData.wp_updated_at
+		: null;
+
+const publishedAt = wpPubIso
+	? new Date(wpPubIso)
+	: (post.data.publishedAt ?? null);
+const modifiedAt = wpModIso ? new Date(wpModIso) : post.data.updatedAt;
+const featSrc = post.data.featured_image?.src || "";
+const featAlt = post.data.featured_image?.alt || post.data.title || "";
+---
+
+<Base
+	title={rawData.seo_title || seo.title}
+	pageTitle={seo.ogTitle}
+	description={seo.description}
+	image={seo.ogImage}
+	canonical={canonicalUrl}
+	robots={seo.robots}
+	type="article"
+	publishedTime={publishedAt?.toISOString() ?? null}
+	modifiedTime={modifiedAt.toISOString()}
+	bodyClass="post-template-default single single-post single-format-standard wp-singular theme-flatsome woocommerce-no-js lightbox nav-dropdown-has-arrow nav-dropdown-has-shadow nav-dropdown-has-border"
+	content={{ collection: "posts", id: post.data.id, slug }}
+>
+	<div id="content" class="blog-wrapper blog-single page-wrapper">
+		<div class="row align-center">
+			<div class="large-10 col">
+				<article
+					id={`post-${post.id}`}
+					class="post type-post status-publish format-standard hentry category-blog"
+				>
+					<div class="article-inner">
+						<div class="entry-content single-page">
+							{
+								featSrc ? (
+									<h1>
+										<img
+											fetchpriority="high"
+											decoding="async"
+											class="aligncenter size-full"
+											src={featSrc}
+											alt={featAlt}
+											title={post.data.title}
+										/>
+									</h1>
+								) : (
+									<h1 class="entry-title">{post.data.title}</h1>
+								)
+							}
+
+							<PortableText value={post.data.content} />
+
+							<div class="blog-share text-center">
+								<div class="is-divider medium"></div>
+								<div class="social-icons share-icons share-row relative">
+									<a
+										href={`whatsapp://send?text=${encodedTitle} - ${encodedUrl}`}
+										data-action="share/whatsapp/share"
+										class="icon button circle is-outline tooltip whatsapp show-for-medium"
+										title="Share on WhatsApp"
+										aria-label="Share on WhatsApp"
+									>
+										<i class="icon-whatsapp"></i>
+									</a>
+									<a
+										href={`https://www.facebook.com/sharer.php?u=${encodedUrl}`}
+										data-label="Facebook"
+										rel="noopener noreferrer nofollow"
+										target="_blank"
+										class="icon button circle is-outline tooltip facebook"
+										title="Share on Facebook"
+										aria-label="Share on Facebook"
+									>
+										<i class="icon-facebook"></i>
+									</a>
+									<a
+										href={`https://twitter.com/share?url=${encodedUrl}`}
+										rel="noopener noreferrer nofollow"
+										target="_blank"
+										class="icon button circle is-outline tooltip twitter"
+										title="Share on Twitter"
+										aria-label="Share on Twitter"
+									>
+										<i class="icon-twitter"></i>
+									</a>
+									<a
+										href={`mailto:enteryour@addresshere.com?subject=${encodedTitle}&body=Check%20this%20out:%20${encodedUrl}`}
+										rel="nofollow"
+										class="icon button circle is-outline tooltip email"
+										title="Email to a Friend"
+										aria-label="Email to a Friend"
+									>
+										<i class="icon-envelop"></i>
+									</a>
+									<a
+										href={`https://pinterest.com/pin/create/button/?url=${encodedUrl}&description=${encodedTitle}`}
+										rel="noopener noreferrer nofollow"
+										target="_blank"
+										class="icon button circle is-outline tooltip pinterest"
+										title="Pin on Pinterest"
+										aria-label="Pin on Pinterest"
+									>
+										<i class="icon-pinterest"></i>
+									</a>
+									<a
+										href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedTitle}`}
+										rel="noopener noreferrer nofollow"
+										target="_blank"
+										class="icon button circle is-outline tooltip linkedin"
+										title="Share on LinkedIn"
+										aria-label="Share on LinkedIn"
+									>
+										<i class="icon-linkedin"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</article>
+
+				<div id="comments" class="comments-area">
+					<Comments collection="posts" contentId={post.data.id} />
+					<div id="respond" class="comment-respond">
+						<h3 id="reply-title" class="comment-reply-title">Leave a Reply</h3>
+						<CommentForm collection="posts" contentId={post.data.id} />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</Base>

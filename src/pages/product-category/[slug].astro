@@ -1,0 +1,64 @@
+---
+import { getEmDashCollection, getTaxonomyTermsWithCacheHint } from "emdash";
+import Base from "../../layouts/Base.astro";
+import ProductCard from "../../components/ProductCard.astro";
+
+const { slug } = Astro.params;
+if (!slug) {
+	return new Response(null, { status: 404, statusText: "Not Found" });
+}
+
+const termsResult = await getTaxonomyTermsWithCacheHint("product_cat");
+const term = termsResult.data.find((t) => t.slug === slug);
+if (!term) {
+	return new Response(null, { status: 404, statusText: "Not Found" });
+}
+
+const { entries: products, cacheHint } = await getEmDashCollection("products", {
+	where: { product_cat: slug },
+	limit: 100,
+});
+
+if (Astro.cache?.enabled) {
+	Astro.cache.set(termsResult.cacheHint);
+	Astro.cache.set(cacheHint);
+}
+---
+
+<Base
+	title={`${term.label} - Ogani`}
+	description={`Browse ${term.label} products from Ogani Vietnam.`}
+	canonical={`${Astro.url.origin}/product-category/${slug}/`}
+	bodyClass="archive tax-product_cat theme-flatsome woocommerce woocommerce-page woocommerce-no-js lightbox nav-dropdown-has-arrow nav-dropdown-has-shadow nav-dropdown-has-border"
+>
+	<div class="shop-page-title category-page-title page-title">
+		<div class="page-title-inner flex-row medium-flex-wrap container">
+			<div class="flex-col flex-grow medium-text-center">
+				<div class="is-large">
+					<nav class="woocommerce-breadcrumb breadcrumbs uppercase">
+						<a href="/">Home</a> <span class="divider">&#47;</span>{" "}
+						<a href="/shop/">Shop</a> <span class="divider">&#47;</span>{" "}
+						{term.label}
+					</nav>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row category-page-row">
+		<div class="col large-12">
+			<div class="shop-container">
+				<div class="woocommerce-notices-wrapper"></div>
+				<div
+					class="products row row-small large-columns-4 medium-columns-3 small-columns-2 equalize-box"
+				>
+					{
+						products.map((product, i) => (
+							<ProductCard product={product} priority={i < 4} />
+						))
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</Base>

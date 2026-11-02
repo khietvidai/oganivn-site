@@ -1,0 +1,112 @@
+---
+import {
+	getEmDashEntry,
+	getSeoMeta,
+	getSiteSettings,
+} from "emdash";
+import { PortableText } from "emdash/ui";
+import Base from "../../layouts/Base.astro";
+import { resolveBlogSiteIdentity } from "../../utils/site-identity";
+import flatsomeTemplates from "../../data/wp-flatsome-templates.json";
+
+const { slug } = Astro.params;
+if (!slug) {
+	return new Response(null, { status: 404, statusText: "Not Found" });
+}
+
+const { entry: product, cacheHint } = await getEmDashEntry("products", slug);
+if (!product) {
+	return new Response(null, { status: 404, statusText: "Not Found" });
+}
+
+if (Astro.cache?.enabled) {
+	Astro.cache.set(cacheHint);
+}
+
+const { siteTitle } = resolveBlogSiteIdentity(await getSiteSettings());
+const rawData = product.data as Record<string, any>;
+const featSrc = product.data.featured_image?.src || "";
+const featuredImageUrl = featSrc
+	? featSrc.startsWith("http")
+		? featSrc
+		: `${Astro.url.origin}${featSrc}`
+	: undefined;
+
+const seo = getSeoMeta(product, {
+	siteTitle,
+	siteUrl: Astro.url.origin,
+	path: `/product/${product.id}/`,
+	defaultOgImage: featuredImageUrl,
+	defaultTitle: rawData.seo_title || undefined,
+	defaultDescription: rawData.seo_description || undefined,
+});
+
+const canonicalUrl = `${Astro.url.origin}/product/${product.id}/`;
+const productsMainMap = flatsomeTemplates.productsMain as Record<string, string>;
+const exactProductMainHtml = productsMainMap[slug];
+---
+
+<Base
+	title={rawData.seo_title || seo.title}
+	pageTitle={seo.ogTitle}
+	description={seo.description}
+	image={seo.ogImage}
+	canonical={canonicalUrl}
+	robots={seo.robots}
+	type="article"
+	bodyClass="product-template-default single single-product wp-singular theme-flatsome woocommerce woocommerce-page woocommerce-no-js lightbox nav-dropdown-has-arrow nav-dropdown-has-shadow nav-dropdown-has-border"
+	content={{ collection: "products", id: product.data.id, slug }}
+>
+	{
+		exactProductMainHtml ? (
+			<Fragment set:html={exactProductMainHtml} />
+		) : (
+			<div class="shop-container">
+				<div class="product type-product status-publish instock">
+					<div class="product-container">
+						<div class="product-main">
+							<div class="row content-row mb-0">
+								<div class="product-gallery large-6 col">
+									{featSrc && (
+										<img
+											src={featSrc}
+											alt={product.data.title}
+											class="wp-post-image"
+										/>
+									)}
+								</div>
+								<div class="product-info summary col-fit col entry-summary product-summary text-left">
+									<h1 class="product-title product_title entry-title">
+										{product.data.title}
+									</h1>
+									<div class="is-divider small" />
+									<div class="price-wrapper">
+										<p class="price product-page-price">
+											<span class="amount red">Liên hệ</span>
+										</p>
+									</div>
+									{product.data.excerpt && (
+										<div class="product-short-description">
+											<p>{product.data.excerpt}</p>
+										</div>
+									)}
+								</div>
+							</div>
+						</div>
+						<div class="product-footer">
+							<div class="container">
+								<div class="woocommerce-tabs wc-tabs-wrapper container tabbed-content">
+									<div class="tab-panels">
+										<div class="woocommerce-Tabs-panel panel entry-content active">
+											<PortableText value={product.data.content} />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		)
+	}
+</Base>

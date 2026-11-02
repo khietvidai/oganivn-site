@@ -15,10 +15,15 @@ export const GET: APIRoute = async ({ site, url }) => {
 
 	const items = posts
 		.map((post) => {
-			if (!post.data.publishedAt) return null;
-			const pubDate = post.data.publishedAt.toUTCString();
+			const rawData = post.data as Record<string, any>;
+			const pubDateObj =
+				typeof rawData.wp_published_at === "string" && rawData.wp_published_at
+					? new Date(rawData.wp_published_at)
+					: post.data.publishedAt;
+			if (!pubDateObj) return null;
+			const pubDate = pubDateObj.toUTCString();
 
-			const postUrl = new URL(`/posts/${post.id}`, siteUrl).href;
+			const postUrl = new URL(`/${post.id}/`, siteUrl).href;
 			const title = escapeXml(post.data.title || "Untitled");
 			const description = escapeXml(post.data.excerpt || "");
 
